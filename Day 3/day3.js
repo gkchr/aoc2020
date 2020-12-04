@@ -31,7 +31,7 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
 /**
  * the daily challenge, part 1.
  *
- * https://adventofcode.com/2020/day/2
+ * https://adventofcode.com/2020/day/3
  */
 function part1(field) {
     let count = 0;
@@ -50,7 +50,7 @@ function part1(field) {
 /**
  * the daily challenge, part 2.
  *
- * https://adventofcode.com/2020/day/2
+ * https://adventofcode.com/2020/day/3
  */
 function part2(field) {
     function slide(field, routes) {
