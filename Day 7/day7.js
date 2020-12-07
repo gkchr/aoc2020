@@ -71,11 +71,9 @@ Bag.prototype.contains = function (which, theBags) {
 function part1(theBags) {
     let count = 0;
 
-    console.log(theBags);
     for(let b in theBags) {
         count += theBags[b].contains("shiny gold", theBags);
     }
-    console.log(theBags);
 
     return count;
 }
