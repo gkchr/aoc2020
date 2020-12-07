@@ -61,6 +61,16 @@ Bag.prototype.contains = function (which, theBags) {
     return this.visited;
 };
 
+Bag.prototype.count = function (theBags) {
+    let total = 1;
+
+    this.bags.forEach(bag => {
+        total += bag.amount * theBags[bag.name].count(theBags);
+    });
+
+    return total;
+};
+
 
 
 /**
@@ -86,5 +96,7 @@ function part1(theBags) {
  * https://adventofcode.com/2020/day/7
  */
 function part2(theBags) {
+    let count = theBags["shiny gold"].count(theBags);
 
+    return count - 1; // Subtract self... the question is: how many OTHER bags?
 }
