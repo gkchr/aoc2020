@@ -39,7 +39,8 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
  * the data structure for the Bags.
  */
 function Bag(name, bags = []) {
-    this.bags = bags && Array.from(bags).map(b => b[2]);
+    this.name = name;
+    this.bags = bags && Array.from(bags).map(b => {return {amount: b[1], name: b[2]}});
     this.visited = undefined;
 }
 
@@ -47,12 +48,12 @@ Bag.prototype.contains = function (which, theBags) {
     if(this.visited === undefined) {
         if(!this.bags) {
             this.visited = false;
-        } else if(this.bags.includes(which)) {
+        } else if(this.bags.map(b => b.name).includes(which)) {
             this.visited = true;
         } else {
             this.visited = false;
             for(let next of this.bags) {
-                if(theBags[next].contains(which, theBags)) this.visited = true;
+                if(theBags[next.name].contains(which, theBags)) this.visited = true;
             }
         }
     }
