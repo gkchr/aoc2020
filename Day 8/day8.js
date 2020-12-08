@@ -30,6 +30,36 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
 
 
 /**
+ * the function to run the program.
+ */
+function runProgram(input) {
+    let visited = [];
+    let position = 0;
+    let accumulator = 0;
+
+    while(position < input.length && !visited.includes(position)) {
+        visited.push(position);
+        let instruction = input[position];
+        switch (instruction.ins) {
+            case "jmp":
+                position += instruction.val;
+                break;
+            case "acc":
+                accumulator += instruction.val;
+                position += 1;
+                break;
+            default:
+                position += 1;
+                break;
+        }
+    }
+
+    return {accumulator: accumulator, status: position - input.length};
+}
+
+
+
+/**
  * the daily challenge, part 1.
  *
  * https://adventofcode.com/2020/day/8
@@ -67,4 +97,18 @@ function part1(input) {
  * https://adventofcode.com/2020/day/8
  */
 function part2(input) {
+    for(let line in input) {
+        let result = null;
+        if(input[line].ins === "nop") {
+            input[line].ins = "jmp";
+            result = runProgram(input);
+            input[line].ins = "nop";
+        }
+        if(input[line].ins === "jmp") {
+            input[line].ins = "nop";
+            result = runProgram(input);
+            input[line].ins = "jmp";
+        }
+        if(result && result.status === 0) return result.accumulator;
+    }
 }
