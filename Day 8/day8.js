@@ -65,28 +65,7 @@ function runProgram(input) {
  * https://adventofcode.com/2020/day/8
  */
 function part1(input) {
-    let visited = [];
-    let position = 0;
-    let accumulator = 0;
-
-    while(!visited.includes(position)) {
-        visited.push(position);
-        let instruction = input[position];
-        switch (instruction.ins) {
-            case "jmp":
-                position += instruction.val;
-                break;
-            case "acc":
-                accumulator += instruction.val;
-                position += 1;
-                break;
-            default:
-                position += 1;
-                break;
-        }
-    }
-
-    return accumulator;
+    return runProgram(input).accumulator;
 }
 
 
