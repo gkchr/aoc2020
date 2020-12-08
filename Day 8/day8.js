@@ -13,7 +13,14 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
     /**
      * split input.
      */
-    let input = data.replace(/(\r\n|\n|\r)/gm,"\n").split("\n").filter(i => i);
+    let input = data
+        .replace(/(\r\n|\n|\r)/gm, "\n")
+        .split("\n")
+        .filter(i => i)
+        .map(instruction => {
+            let part = instruction.split(" ");
+            return {ins: part[0], val: parseInt(part[1])};
+        });
 
     console.log("--- part 1 ---", part1(input));
 
@@ -34,13 +41,13 @@ function part1(input) {
 
     while(!visited.includes(position)) {
         visited.push(position);
-        let instruction = input[position].split(" ");
-        switch (instruction[0]) {
+        let instruction = input[position];
+        switch (instruction.ins) {
             case "jmp":
-                position += parseInt(instruction[1]);
+                position += instruction.val;
                 break;
             case "acc":
-                accumulator += parseInt(instruction[1]);
+                accumulator += instruction.val;
                 position += 1;
                 break;
             default:
