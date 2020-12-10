@@ -57,5 +57,26 @@ function part1(input) {
  * https://adventofcode.com/2020/day/10
  */
 function part2(input) {
+    input = input.sort((a, b) => a-b);
+    let max = Math.max(...input)+3;
 
+    input.unshift(0); // start
+    input.push(max); // end
+
+    input=input.reverse();
+    let possible = {};
+    let totalWays = {};
+    totalWays[max] = 1;
+
+    for(let that of input) {
+        possible[that] = input.filter(i => { return i > that && i <= that+3; });
+        if(that !== max) {
+            totalWays[that] = 0;
+            for(let poss of possible[that]) {
+                totalWays[that] += totalWays[poss];
+            }
+        }
+    }
+
+    return totalWays[0];
 }
