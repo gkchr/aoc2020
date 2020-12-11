@@ -37,7 +37,7 @@ function part1(input) {
         output = step(output.array);
     }
     let seats = output.array.reduce((count, row) => count + row.reduce((count, i) => count + (i === "#" ? 1 : 0), 0), 0);
-    console.log(seats);
+    return seats;
 }
 
 function step(input) {
@@ -88,7 +88,7 @@ function part2(input) {
         output = step2(output.array);
     }
     let seats = output.array.reduce((count, row) => count + row.reduce((count, i) => count + (i === "#" ? 1 : 0), 0), 0);
-    console.log(seats);
+    return seats;
 }
 
 function step2(input) {
@@ -127,26 +127,15 @@ function step2(input) {
             }
         }
     }
-    console.log(vis.map(i => i.join(" ")));
-    console.log(changed)
     return {array: output, changed: changed};
 }
 
 function isOccupied(arr, y, x, y_, x_) {
-    let interesting = {x: -1, y: -1};
     for(let i = 1; ; ++i) {
-        if(x == interesting.x && y == interesting.y) console.log(i, x, y, arr[y][x], x_, y_);
         if(arr[y+y_*i] && arr[y+y_*i][x+x_*i]) {
-            if(arr[y+y_*i][x+x_*i] === ".") {
-                continue;
-            }
-            if(arr[y+y_*i][x+x_*i] === "#") {
-                if(x == interesting.x && y == interesting.y) console.log("return 1 for ", y+y_*i, x+x_*i, "\n");
-
-                return 1;
-            }
+            if(arr[y+y_*i][x+x_*i] === ".") continue;
+            if(arr[y+y_*i][x+x_*i] === "#") return 1;
         }
-        if(x == interesting.x && y == interesting.y) console.log("return 0 for ", y+y_*i, x+x_*i, "\n");
         return 0;
     }
 }
