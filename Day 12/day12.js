@@ -67,13 +67,9 @@ class Ship {
 
 
 /**
- * the daily challenge, part 1.
- *
- * https://adventofcode.com/2020/day/12
+ * the navigation function to handle the input for a given ship.
  */
-function part1(input) {
-    let ship = new Ship();
-
+function navigate(input, ship) {
     input.forEach(line => {
         switch (line.ins) {
             case "N":
@@ -99,6 +95,18 @@ function part1(input) {
                 break;
         }
     });
+}
+
+
+
+/**
+ * the daily challenge, part 1.
+ *
+ * https://adventofcode.com/2020/day/12
+ */
+function part1(input) {
+    let ship = new Ship();
+    navigate(input, ship);
     return ship.manhattanDistance;
 }
 
@@ -144,32 +152,6 @@ class WaypointShip extends Ship {
  */
 function part2(input) {
     let ship = new WaypointShip(10, 1);
-
-    input.forEach(line => {
-        switch (line.ins) {
-            case "N":
-                ship.move(0, line.val);
-                break;
-            case "S":
-                ship.move(0, -line.val);
-                break;
-            case "E":
-                ship.move(line.val, 0);
-                break;
-            case "W":
-                ship.move(-line.val, 0);
-                break;
-            case "L":
-                ship.turn(line.val);
-                break;
-            case "R":
-                ship.turn(-line.val);
-                break;
-            case "F":
-                ship.forward(line.val);
-                break;
-        }
-        console.log(line, "\n", ship, "\n\n");
-    });
+    navigate(input, ship);
     return ship.manhattanDistance;
 }
