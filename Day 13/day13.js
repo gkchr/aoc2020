@@ -54,5 +54,19 @@ function part1(input) {
  * https://adventofcode.com/2020/day/13
  */
 function part2(input) {
+    let buses = input[1].split(",").map(Number).map((bus, i) => ({bus: bus, offset: i})).filter(bus => bus.bus).sort((a, b) => b.bus - a.bus);
 
+    let wrong = true;
+    let time = Infinity;
+    for(let mul = 218818380743; wrong; ++mul) {
+        time = buses[0].bus * mul - buses[0].offset;
+        wrong = false;
+
+        for(let i = 1; i < buses.length; ++i) {
+            if((time + buses[i].offset) % buses[i].bus !== 0) wrong = true;
+        }
+    }
+
+    console.log(buses, time)
+    return time;
 }
