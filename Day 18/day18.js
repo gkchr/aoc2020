@@ -80,9 +80,69 @@ function part1(input) {
 
 
 /**
+ * the function to traverse the parentheses.
+ */
+function traverse(formula) {
+    let start = formula.indexOf("(");
+
+    if(start === -1) return solve(formula);
+
+    let count = 0;
+    for(let end = start+1; end < formula.length; ++end) {
+        if(formula[end] === "(") count++;
+        else if(formula[end] === ")" && count > 0) count--;
+        else if(formula[end] === ")" && count === 0) {
+            return traverse([].concat(
+                formula.slice(0, start),
+                traverse(formula.slice(start+1, end)),
+                formula.slice(end+1, formula.length))
+            );
+        }
+    }
+}
+
+
+
+/**
+ * the function to solve the flat formula.
+ */
+function solve(formula) {
+    let index = formula.indexOf("+");
+    while(index !== -1) {
+        formula = formula.slice(0, index-1).concat(
+            parseInt(formula[index-1]) + parseInt(formula[index+1]),
+            formula.slice(index+2, index.length)
+        );
+
+        index = formula.indexOf("+");
+    }
+
+    index = formula.indexOf("*");
+    while(index !== -1) {
+        formula = formula.slice(0, index-1).concat(
+            parseInt(formula[index-1]) * parseInt(formula[index+1]),
+            formula.slice(index+2, index.length)
+        );
+
+        index = formula.indexOf("*");
+    }
+
+    return Number(formula);
+}
+
+
+
+/**
  * the daily challenge, part 2.
  *
  * https://adventofcode.com/2020/day/18
  */
 function part2(input) {
+    let results = [];
+
+    input.forEach(line => {
+        results.push(traverse(line));
+    });
+
+    return results.reduce((a,b) => a+b);
 }
