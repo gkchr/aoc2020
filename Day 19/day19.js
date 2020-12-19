@@ -17,10 +17,11 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
         .replace(/(\r\n|\n|\r)/gm, "\n")
         .split("\n\n");
 
+    rules = rules.split("\n").filter(i => i);
 
     console.log("--- part 1 ---", part1(rules, messages));
 
-    // console.log("--- part 2 ---", part2(rules, messages));
+    console.log("--- part 2 ---", part2(rules, messages));
 });
 
 
@@ -42,37 +43,19 @@ class Rule {
             }
         }
     }
-
-    check(input, pos, rulesArr) {
-        // console.log("checking", input, pos, this);
-
-        if(this.letter) { // only letter
-            return {is: input[pos] === this.letter, checked: pos+1};
-        }
-
-        // complicated rule
-        for(let side of this.rules) {
-            let checked = pos;
-
-            for(let rule of side) {
-                let result = rulesArr[rule].check(input, checked, rulesArr);
-                if(result.is) {
-                    checked = result.checked;
-                } else {
-                    checked = pos;
-                    break;
-                }
-            }
-
-            if(checked > pos) {
-                return {is: true, checked: checked};
-            }
-        }
-
-        return {is: false, checked: 0};
-    }
 }
 
+function check(input, allRules, [rule, ...rest]) {
+    // console.log("checking", input, pos, this);
+    if (!rule || !input) return !rule && !input;
+
+    if(allRules[rule].letter) { // only letter
+        return input[0] === allRules[rule].letter && check(input.slice(1), allRules, rest);
+    }
+
+    // complicated rule
+    return allRules[rule].rules.some(r => check(input, allRules, r.concat(rest)));
+}
 
 
 /**
@@ -81,7 +64,7 @@ class Rule {
  * https://adventofcode.com/2020/day/19
  */
 function part1(rules, messages) {
-    rules = rules.split("\n").filter(i => i).map(r => r.split(": "));
+    rules = rules.map(r => r.split(": "));
     let theRules = {};
     for(let input of rules) {
         theRules[input[0]] = new Rule(input[1]);
@@ -90,8 +73,23 @@ function part1(rules, messages) {
     let count = 0;
     messages = messages.split("\n").filter(i => i);
     for(let msg of messages) {
-        let result = theRules[0].check(msg.split(""), 0, theRules);
-        if(result.is && result.checked === msg.length) count++;
+        let result = check(msg, theRules, ["0"]);
+        if(result) count++;
     }
     return count;
+}
+
+
+
+/**
+ * the daily challenge, part 2.
+ *
+ * https://adventofcode.com/2020/day/19
+ */
+function part2(rules, messages) {
+    for(let i in rules) {
+        if(rules[i].indexOf("8:") === 0) rules[i] = "8: 42 | 42 8";
+        if(rules[i].indexOf("11:") === 0) rules[i] = "11: 42 31 | 42 11 31";
+    }
+    return part1(rules, messages);
 }
