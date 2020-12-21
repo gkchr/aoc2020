@@ -22,8 +22,6 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
     let ingredients = input.map(line => line[0].split(" "));
     let allergens = input.map(line => line[1].split(")")[0].split(", "));
 
-    // console.log(ingredients);
-    // console.log(allergens);
     let list = {};
     let allIngredients = {};
 
@@ -59,29 +57,6 @@ fs.readFile('input.txt', 'utf8', function (err, data) {
 
 
     list.sort((a,b) => a[0].localeCompare(b[0]));
-    console.log(list);
 
     console.log("--- part 2 ---", list.map(el => el[1][0]).join());
 });
-
-
-
-/**
- * the daily challenge, part 1.
- *
- * https://adventofcode.com/2020/day/21
- */
-function part1(ingredients, allergens) {
-
-}
-
-
-
-/**
- * the daily challenge, part 2.
- *
- * https://adventofcode.com/2020/day/21
- */
-function part2(input) {
-
-}
